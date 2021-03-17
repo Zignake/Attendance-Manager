@@ -3,10 +3,14 @@ import os
 import numpy as np
 import time
 
+personListFile = open("personList.txt", "a")
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 face_id = input(
     '[INPUT] Enter the name of the person whose dataset is to be made: ')
+personListFile.write(face_id + "\n")
+personListFile.close()
+
 parent_dir = "dataset/"
 path = os.path.join(parent_dir, face_id)
 os.mkdir(path)

@@ -3,12 +3,14 @@ import numpy as np
 from PIL import Image
 import os
 
+personListFile = open("personList.txt", "r")
+personList = personListFile.readlines()
+for i, person in enumerate(personList):
+    personList[i] = person[:-1]
+personListFile.close()
 
-path = 'dataset'
+path = 'dataset/'
 recognizer = cv2.face.LBPHFaceRecognizer_create()
-detector = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-
-# function to get the images and label data
 
 
 def getImagesAndLabels(path):
@@ -17,14 +19,12 @@ def getImagesAndLabels(path):
     ids = []
 
     for imagePath in imagePaths:
-        PIL_img = Image.open(imagePath).convert('L')  # grayscale
-        img_numpy = np.array(PIL_img, 'uint8')
-        id = int(os.path.split(imagePath)[-1].split(".")[1])
-        faces = detector.detectMultiScale(img_numpy)
-
-        for (x, y, w, h) in faces:
-            faceSamples.append(img_numpy[y:y+h, x:x+w])
-            ids.append(id)
+        val = imagePath.split('/')[1]
+        currentId = personList.index(val)
+        for i in range(30):
+            img = cv2.imread(imagePath + '/' + str(i+1) + '.jpg', 0)
+            faceSamples.append(img)
+            ids.append(currentId)
 
     return faceSamples, ids
 
